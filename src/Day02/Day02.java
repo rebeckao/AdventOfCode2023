@@ -23,6 +23,25 @@ public class Day02 {
         return true;
     }
 
+    static int sumOfPowerOfGames(List<String> games) {
+        return games.stream()
+                .map(it -> parseGame(it))
+                .mapToInt(it -> resolvePower(it))
+                .sum();
+    }
+
+    private static int resolvePower(Game game) {
+        Map<String, Integer> minQuantities = new HashMap<>(Map.of("red", 0, "green", 0, "blue", 0));
+        for (Map<String, Integer> draw : game.draws()) {
+            for (String cubeColour : minQuantities.keySet()) {
+                if (draw.getOrDefault(cubeColour, 0) > minQuantities.get(cubeColour)) {
+                    minQuantities.put(cubeColour, draw.get(cubeColour));
+                }
+            }
+        }
+        return minQuantities.values().stream().reduce((a, b) -> a * b).stream().mapToInt(it -> it).sum();
+    }
+
     private static Game parseGame(String gameString) {
         String[] gameStringParts = gameString.split(":");
         int gameId = Integer.parseInt(gameStringParts[0].substring(5));
