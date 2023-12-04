@@ -2,12 +2,10 @@ package Day02;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static common.Common.realData;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Day02Test {
 
@@ -23,8 +21,8 @@ class Day02Test {
     }
 
     @Test
-    void sumOfIdsOfPossibleGamesRealData() throws IOException {
-        assertEquals(2239, Day02.sumOfIdsOfPossibleGames(Files.readAllLines(Path.of("src/resources/day02.txt"))));
+    void sumOfIdsOfPossibleGamesRealData() {
+        assertEquals(2239, Day02.sumOfIdsOfPossibleGames(realData(2)));
     }
 
     @Test
@@ -39,7 +37,7 @@ class Day02Test {
     }
 
     @Test
-    void sumOfPowerOfGamesRealData() throws IOException {
-        assertEquals(83435, Day02.sumOfPowerOfGames(Files.readAllLines(Path.of("src/resources/day02.txt"))));
+    void sumOfPowerOfGamesRealData() {
+        assertEquals(83435, Day02.sumOfPowerOfGames(realData(2)));
     }
 }

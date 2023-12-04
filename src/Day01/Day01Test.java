@@ -2,11 +2,9 @@ package Day01;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
+import static common.Common.realData;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Day01Test {
@@ -22,8 +20,8 @@ class Day01Test {
     }
 
     @Test
-    void sumOfCalibrationValuesRealData() throws IOException {
-        assertEquals(55477, Day01.sumOfCalibrationValues(Files.readAllLines(Path.of("src/resources/day01.txt"))));
+    void sumOfCalibrationValuesRealData() {
+        assertEquals(55477, Day01.sumOfCalibrationValues(realData(1)));
     }
 
     @Test
@@ -48,7 +46,7 @@ class Day01Test {
     }
 
     @org.junit.jupiter.api.Test
-    void sumOfCalibrationValuesWithSpelledDigitsRealData() throws IOException {
-        assertEquals(54431, Day01.sumOfCalibrationValuesWithSpelledDigits(Files.readAllLines(Path.of("src/resources/day01.txt")))); // 54414 too low
+    void sumOfCalibrationValuesWithSpelledDigitsRealData() {
+        assertEquals(54431, Day01.sumOfCalibrationValuesWithSpelledDigits(realData(1)));
     }
 }
