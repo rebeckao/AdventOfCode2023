@@ -21,4 +21,17 @@ class Day06Test {
     void multipliedWaysToBeatRecordRealData() {
         assertEquals(633080, Day06.multipliedWaysToBeatRecord(realData(6)));
     }
+
+    @Test
+    void waysToBeatRecordForSingleRace() {
+        assertEquals(71503, Day06.waysToBeatRecordForSingleRace(List.of(
+                "Time:      7  15   30",
+                "Distance:  9  40  200"
+        )));
+    }
+
+    @Test
+    void waysToBeatRecordForSingleRaceRealData() {
+        assertEquals(20048741, Day06.waysToBeatRecordForSingleRace(realData(6)));
+    }
 }
