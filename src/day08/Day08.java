@@ -1,10 +1,10 @@
 package day08;
 
+import java.math.BigInteger;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 
 public class Day08 {
 
@@ -38,35 +38,28 @@ public class Day08 {
     static long ghostStepsToEnd(List<String> maps) {
         String directions = maps.get(0);
         Map<String, DesertNode> cyclesToNextEnd = calculateCyclesToEndNodes(maps, directions);
-        long mostCycles = 1;
-        List<String> paths = new ArrayList<>(cyclesToNextEnd.keySet().stream().filter(it -> endsWith(it, 'A')).toList());
-        List<Long> cyclesTravelled = new ArrayList<>(LongStream.range(0, paths.size()).map(_ -> 0).boxed().toList());
-        boolean done = false;
-        while (!done) {
-            done = true;
-            for (int i = 0; i < paths.size(); i++) {
-                Long currentCyclesTravelled = cyclesTravelled.get(i);
-                if (currentCyclesTravelled != mostCycles) {
-                    done = false;
-                }
-                DesertNode desertNode = cyclesToNextEnd.get(paths.get(i));
-                if (currentCyclesTravelled < mostCycles) {
-                    long newCurrentCyclesTravelled = currentCyclesTravelled + desertNode.cyclesToEnd.orElseThrow();
-                    cyclesTravelled.set(i, newCurrentCyclesTravelled);
-                    paths.set(i, desertNode.target);
-                    if (newCurrentCyclesTravelled > mostCycles) {
-                        mostCycles = newCurrentCyclesTravelled;
-                    }
-                }
-            }
-        }
-        return mostCycles * directions.length();
+        // This only works because the data is the way it is. It's not a general solution.
+        long leastCommonMultiple = cyclesToNextEnd.entrySet().stream()
+                .filter(it -> endsWith(it.getKey(), 'A'))
+                .map(it -> it.getValue().cyclesToEnd.orElseThrow())
+                .map(BigInteger::valueOf)
+                .reduce(Day08::leastCommonMultiple)
+                .orElseThrow()
+                .longValue();
+        return leastCommonMultiple * directions.length();
+    }
+
+    private static BigInteger leastCommonMultiple(BigInteger a, BigInteger b) {
+        BigInteger gcd = a.gcd(b);
+        BigInteger absProduct = a.multiply(b).abs();
+        return absProduct.divide(gcd);
     }
 
     private static Map<String, DesertNode> calculateCyclesToEndNodes(List<String> maps, String directions) {
         Map<String, DesertNode> fullCycleNodes = parseMapAndCalculateFullCycleNodes(maps, directions);
         Set<String> unfinishedNodes = fullCycleNodes.keySet().stream()
                 .filter(it -> !it.equals(fullCycleNodes.get(it).target))
+                .filter(it -> !endsWith(fullCycleNodes.get(it).target, 'Z'))
                 .collect(Collectors.toSet());
         Set<String> deadEndNodes = fullCycleNodes.keySet().stream()
                 .filter(it -> it.equals(fullCycleNodes.get(it).target))
