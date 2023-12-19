@@ -22,4 +22,18 @@ class Day09Test {
     void sumOfExtrapolatedValuesRealData() {
         assertEquals(1955513104, Day09.sumOfExtrapolatedValues(realData(9)));
     }
+
+    @Test
+    void sumOfBackwardExtrapolatedValues() {
+        assertEquals(2, Day09.sumOfBackwardExtrapolatedValues(List.of(
+                "0 3 6 9 12 15",
+                "1 3 6 10 15 21",
+                "10 13 16 21 30 45"
+        )));
+    }
+
+    @Test
+    void sumOfBackwardExtrapolatedValuesRealData() {
+        assertEquals(1131, Day09.sumOfBackwardExtrapolatedValues(realData(9)));
+    }
 }
