@@ -6,11 +6,11 @@ import java.util.List;
 import static java.lang.Math.abs;
 
 public class Day11 {
-    public static int sumOfGalaxyDistances(List<String> galaxyMap) {
-        List<Integer> doubleRows = findDoubleRows(galaxyMap);
-        List<Integer> doubleColumns = findDoubleColumns(galaxyMap);
+    public static long sumOfGalaxyDistances(List<String> galaxyMap, int expansionRate) {
+        List<Integer> expandedRows = findDoubleRows(galaxyMap);
+        List<Integer> expandedColumns = findDoubleColumns(galaxyMap);
         List<Galaxy> originalGalaxyPositions = findGalaxyPositions(galaxyMap);
-        List<Galaxy> expandedGalaxyPositions = findExpandedGalaxyPositions(originalGalaxyPositions, doubleRows, doubleColumns);
+        List<Galaxy> expandedGalaxyPositions = findExpandedGalaxyPositions(originalGalaxyPositions, expandedRows, expandedColumns, expansionRate);
         return sumGalaxyDistances(expandedGalaxyPositions);
     }
 
@@ -28,9 +28,10 @@ public class Day11 {
         List<Integer> doubleColumns = new ArrayList<>();
         for (int colum = 0; colum < galaxyMap.getFirst().length(); colum++) {
             boolean empty = true;
-            for (int row = 0; row < galaxyMap.size(); row++) {
-                if (galaxyMap.get(row).charAt(colum) == '#') {
+            for (String string : galaxyMap) {
+                if (string.charAt(colum) == '#') {
                     empty = false;
+                    break;
                 }
             }
             if (empty) {
@@ -53,25 +54,25 @@ public class Day11 {
         return galaxies;
     }
 
-    private static List<Galaxy> findExpandedGalaxyPositions(List<Galaxy> galaxies, List<Integer> doubleRows, List<Integer> doubleColumns) {
+    private static List<Galaxy> findExpandedGalaxyPositions(List<Galaxy> galaxies, List<Integer> doubleRows, List<Integer> doubleColumns, int expansionRate) {
         return galaxies.stream()
-                .map(originalPosition -> expandCoordinate(doubleRows, doubleColumns, originalPosition))
+                .map(originalPosition -> expandCoordinate(doubleRows, doubleColumns, originalPosition, expansionRate))
                 .toList();
     }
 
-    private static Galaxy expandCoordinate(List<Integer> doubleRows, List<Integer> doubleColumns, Galaxy originalPosition) {
-        int newRow = originalPosition.row;
-        int newColumn = originalPosition.column;
+    private static Galaxy expandCoordinate(List<Integer> doubleRows, List<Integer> doubleColumns, Galaxy originalPosition, int expansionRate) {
+        long newRow = originalPosition.row;
+        long newColumn = originalPosition.column;
         for (int row : doubleRows) {
             if (row < originalPosition.row) {
-                newRow++;
+                newRow += (expansionRate - 1);
             } else {
                 break;
             }
         }
         for (int colum : doubleColumns) {
             if (colum < originalPosition.column) {
-                newColumn++;
+                newColumn += (expansionRate - 1);
             } else {
                 break;
             }
@@ -79,8 +80,8 @@ public class Day11 {
         return new Galaxy(newRow, newColumn);
     }
 
-    private static int sumGalaxyDistances(List<Galaxy> galaxies) {
-        int distances = 0;
+    private static long sumGalaxyDistances(List<Galaxy> galaxies) {
+        long distances = 0;
         for (int firstGalaxyIndex = 0; firstGalaxyIndex < galaxies.size() - 1; firstGalaxyIndex++) {
             for (int secondGalaxyIndex = firstGalaxyIndex + 1; secondGalaxyIndex < galaxies.size(); secondGalaxyIndex++) {
                 distances += distanceBetween(galaxies.get(firstGalaxyIndex), galaxies.get(secondGalaxyIndex));
@@ -89,11 +90,11 @@ public class Day11 {
         return distances;
     }
 
-    private static int distanceBetween(Galaxy galaxy1, Galaxy galaxy2) {
+    private static long distanceBetween(Galaxy galaxy1, Galaxy galaxy2) {
         return abs(galaxy2.row - galaxy1.row) + abs(galaxy2.column - galaxy1.column);
     }
 
-    record Galaxy(int row, int column) {
+    record Galaxy(long row, long column) {
 
     }
 }
